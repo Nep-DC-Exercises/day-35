@@ -11,10 +11,17 @@ const data = {
 
 // the slash is self-referential. Depends on what file you're currently in
 router.get("/", (req, res) => {
-    let json = { data };
     res.status(200)
-        .send(json)
-        .end();
+    .render('template', {
+        // anything listed as locals becomes a variable you can listen for in your template
+        locals: {
+            title: 'A list of arsenal players',
+            arsenalPlayers: data.arsenal
+        },
+        partials: {
+            partial: "partial-all"
+        }
+    })
 });
 
 module.exports = router;
