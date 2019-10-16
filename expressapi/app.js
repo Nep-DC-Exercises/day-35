@@ -11,43 +11,16 @@ app.listen(3333, function() {
 app.use(compression());
 app.use(helmet());
 
-// Routes
-const rootController = require("./routes/index.js");
-
-const data = {
-    arsenal: [
-        { name: "Lacazette", position: "striker" },
-        { name: "Auba", position: "striker" },
-        { name: "Luiz", position: "defender" }
-    ]
-};
+// Creating routes
+// Every controller will talk to a model that populates a view
+const rootController = require("./routes/index.js"),
+allController = require("./routes/all.js"),
+wpController = require("./routes/wp.js"),
+personController = require("./routes/person.js")
 
 // Routes
-app.get("/", rootController);
-
-app.get("/all", function(req, res) {
-    let json = {
-        data
-    };
-
-    res.status(200)
-        .send(json)
-        .end();
-});
-
-app.get("/wp", function(req, res) {
-    // Destructuring?
-    const { name } = req.query;
-    let snippet = `<h1>Hello ${name}</h1>`;
-
-    if (!name) {
-        snippet = `<h1>NO NAME PROVIDED!</h1>`;
-        res.status(500)
-            .send(snippet)
-            .end();
-    }
-
-    res.status(200)
-        .send(snippet)
-        .end();
-});
+// Express USE the router that we've exported
+app.use("/", rootController);
+app.use("/all", allController); 
+app.use("/wp", wpController);
+app.use("/person", personController);
